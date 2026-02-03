@@ -1,17 +1,14 @@
 --[[ 
 ╔═══════════════════════════════════════════════════════════════════════════╗
-║           RUJXMOD - ULTIMATE PROFESSIONAL EDITION V5.0 COMPLETE            ║
-║      Cybernetic Blue Theme + Professional Animations + Full Features        ║
+║          RUJXMOD - เวอร์ชั่นสมบูรณ์ สำหรับมือถือ (V5.0 MOBILE THAI)       ║
+║            ดีไซน์ระดับมืออาชีพ • เคลื่อนไหวลื่นไหล • ตัวเลือกเต็มๆ          ║
+║                        สำหรับ Roblox Executor                              ║
 ║                                                                             ║
-║  📌 INSTALLATION GUIDE:                                                    ║
-║  1. Copy ALL this code                                                     ║
-║  2. Go to: https://pastebin.com/                                           ║
-║  3. Paste this code → Click "Create Paste"                                 ║
-║  4. Copy the URL (example: pastebin.com/abc123def)                          ║
-║  5. In your Executor, run:                                                 ║
-║     loadstring(game:HttpGet("https://pastebin.com/raw/abc123def"))()        ║
-║                                                                             ║
-║  Or paste directly in any Lua Executor (Synapse X, Krnl, etc)              ║
+║  📱 วิธีใช้:                                                               ║
+║  1. Copy โค้ดทั้งหมด                                                       ║
+║  2. Paste ใน Executor (Synapse X, Krnl, Script-Ware)                      ║
+║  3. กด Execute/Run                                                         ║
+║  4. ดูปุ่ม RX ขึ้นมาที่จอ → กดเพื่อเปิดเมนู                               ║
 ║                                                                             ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 ]]
@@ -27,29 +24,41 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 
--- === CONFIG ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- ⚙️ ตั้งค่า
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local RuJ_Config = {
+    -- การต่อสู้
     Aimbot = false,
-    AimPart = "Head",
+    AimPart = "หัว",
     AimSmooth = 5,
     HitChance = 100,
     HitboxExpander = false,
     HitboxSize = 15,
+    
+    -- การแสดงผล
     ESP_Box = false,
     ESP_Name = false,
     Tracers = false,
-    TracerOrigin = "Bottom",
+    TracerOrigin = "ล่าง",
     FullBright = false,
+    
+    -- การเคลื่อนไหว
     Speed = 16,
     Jump = 50,
     InfiniteJump = false,
     NoClip = false,
     Fly = false,
-    FlySpeed = 50,
+    
+    -- ระบบ
     AntiAFK = false,
 }
 
--- === COLORS ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 🎨 สีและสไตล์ (สีฟ้า + ขาว)
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local Colors = {
     DarkBg = Color3.fromRGB(10, 12, 18),
     SideBg = Color3.fromRGB(15, 18, 28),
@@ -68,7 +77,10 @@ local Colors = {
     Warning = Color3.fromRGB(255, 200, 50),
 }
 
--- === ANIMATION LIBRARY ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 🎬 ไลบรารี่เอฟเฟกต์
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local AnimLib = {}
 
 function AnimLib.Tween(object, properties, duration, style, direction)
@@ -92,8 +104,8 @@ function AnimLib.FadeOut(ui, duration, callback)
 end
 
 function AnimLib.SlideUp(ui, duration)
-    ui.Position = ui.Position + UDim2.new(0, 0, 0.15, 0)
-    AnimLib.Tween(ui, {Position = ui.Position - UDim2.new(0, 0, 0.15, 0)}, duration or 0.4)
+    ui.Position = ui.Position + UDim2.new(0, 0, 0.1, 0)
+    AnimLib.Tween(ui, {Position = ui.Position - UDim2.new(0, 0, 0.1, 0)}, duration or 0.4)
 end
 
 function AnimLib.Scale(ui, targetScale, duration)
@@ -125,14 +137,20 @@ function AnimLib.ColorTween(ui, targetColor, duration)
     AnimLib.Tween(ui, {BackgroundColor3 = targetColor}, duration or 0.3)
 end
 
--- === CLEANUP OLD UI ===
-if LocalPlayer.PlayerGui:FindFirstChild("RUJXMOD_ULTIMATE_V5") then 
-    LocalPlayer.PlayerGui.RUJXMOD_ULTIMATE_V5:Destroy() 
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 🗑️ ลบ UI เก่า
+-- ═══════════════════════════════════════════════════════════════════════════
+
+if LocalPlayer.PlayerGui:FindFirstChild("RUJXMOD_MOBILE") then 
+    LocalPlayer.PlayerGui.RUJXMOD_MOBILE:Destroy() 
 end
 
--- === MAIN UI ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 📱 UI หลัก (Mobile Optimized)
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "RUJXMOD_ULTIMATE_V5"
+ScreenGui.Name = "RUJXMOD_MOBILE"
 ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -142,30 +160,35 @@ pcall(function() ESP_Holder.Parent = game.CoreGui end)
 if ESP_Holder.Parent == nil then
     ESP_Holder.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
-ESP_Holder.Name = "RUJ_ESP_HOLDER_V5"
+ESP_Holder.Name = "RUJ_ESP_MOBILE"
 
--- === FLOATING ICON ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 🎯 ไอคอนลอยตัว (ปรับให้ดีขึ้นสำหรับมือถือ)
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local Icon = Instance.new("TextButton")
 Icon.Name = "MainIcon"
-Icon.Size = UDim2.new(0, 80, 0, 80)
-Icon.Position = UDim2.new(0, 20, 0.35, 0)
+Icon.Size = UDim2.new(0, 100, 0, 100)
+Icon.Position = UDim2.new(0, 15, 0, 80)
 Icon.BackgroundColor3 = Colors.DarkBg
-Icon.Text = "RX"
+Icon.Text = "RX\nเมนู"
 Icon.TextColor3 = Colors.CyanAccent
 Icon.Font = Enum.Font.GothamBlack
-Icon.TextSize = 32
+Icon.TextSize = 18
 Icon.Parent = ScreenGui
 Icon.BorderSizePixel = 0
+Icon.ZIndex = 100
 
 local IconStroke = Instance.new("UIStroke")
 IconStroke.Color = Colors.CyanAccent
-IconStroke.Thickness = 3
+IconStroke.Thickness = 4
 IconStroke.Parent = Icon
 
 Instance.new("UICorner", Icon).CornerRadius = UDim.new(1, 0)
 
+-- ลูปวงแหวน
 local Ring = Instance.new("Frame")
-Ring.Size = UDim2.new(0, 80, 0, 80)
+Ring.Size = UDim2.new(0, 100, 0, 100)
 Ring.Position = UDim2.new(0, 0, 0, 0)
 Ring.BackgroundTransparency = 1
 Ring.BorderSizePixel = 0
@@ -173,7 +196,7 @@ Ring.Parent = Icon
 
 local RingStroke = Instance.new("UIStroke")
 RingStroke.Color = Colors.LightBlue
-RingStroke.Thickness = 1.5
+RingStroke.Thickness = 2
 RingStroke.Transparency = 0.6
 RingStroke.Parent = Ring
 
@@ -181,15 +204,15 @@ Instance.new("UICorner", Ring).CornerRadius = UDim.new(1, 0)
 
 spawn(function()
     while Icon.Parent do
-        local tween = AnimLib.Tween(Ring, {Rotation = 360}, 3, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
-        tween.Completed:Wait()
+        AnimLib.Tween(Ring, {Rotation = 360}, 3, Enum.EasingStyle.Linear)
+        wait(3)
         Ring.Rotation = 0
     end
 end)
 
 Icon.MouseEnter:Connect(function()
     AnimLib.ColorTween(Icon, Colors.HoverBg, 0.2)
-    AnimLib.Glow(Icon, Colors.BluePrimary, 4)
+    AnimLib.Glow(Icon, Colors.BluePrimary, 5)
 end)
 
 Icon.MouseLeave:Connect(function()
@@ -197,6 +220,7 @@ Icon.MouseLeave:Connect(function()
     AnimLib.Unglow(Icon)
 end)
 
+-- ลากไอคอน
 local dragging, dragStart, startPos
 
 Icon.InputBegan:Connect(function(input)
@@ -211,7 +235,8 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local delta = input.Position - dragStart
-        Icon.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        Icon.Position = UDim2.new(startPos.X.Scale, math.clamp(startPos.X.Offset + delta.X, 0, 1920), 
+                                   startPos.Y.Scale, math.clamp(startPos.Y.Offset + delta.Y, 0, 1080))
     end
 end)
 
@@ -221,16 +246,20 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
--- === MAIN WINDOW ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 🪟 หน้าต่างหลัก (ปรับขนาดสำหรับมือถือ)
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainHub"
-MainFrame.Size = UDim2.new(0, 650, 0, 520)
-MainFrame.Position = UDim2.new(0.5, -325, 0.5, -260)
+MainFrame.Size = UDim2.new(0.95, 0, 0.85, 0)
+MainFrame.Position = UDim2.new(0.025, 0, 0.075, 0)
 MainFrame.BackgroundColor3 = Colors.DarkBg
 MainFrame.BorderSizePixel = 0
 MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
 MainFrame.ClipsDescendants = true
+MainFrame.ZIndex = 50
 
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 15)
 
@@ -240,9 +269,12 @@ WindowStroke.Thickness = 2
 WindowStroke.Transparency = 0.6
 WindowStroke.Parent = MainFrame
 
--- === HEADER ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 📌 ส่วนหัว
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local Header = Instance.new("Frame")
-Header.Size = UDim2.new(1, 0, 0, 60)
+Header.Size = UDim2.new(1, 0, 0, 70)
 Header.BackgroundColor3 = Colors.SideBg
 Header.BorderSizePixel = 0
 Header.Parent = MainFrame
@@ -257,29 +289,29 @@ HeaderDivider.BorderSizePixel = 0
 HeaderDivider.Parent = Header
 
 local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Text = "⚙️  RUJXMOD SUPREME V5"
-TitleLabel.Size = UDim2.new(0.6, 0, 1, 0)
-TitleLabel.Position = UDim2.new(0, 20, 0, 0)
+TitleLabel.Text = "⚙️  RUJXMOD สูงสุด V5"
+TitleLabel.Size = UDim2.new(0.65, 0, 1, 0)
+TitleLabel.Position = UDim2.new(0, 15, 0, 0)
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.TextColor3 = Colors.WhiteAccent
 TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.TextSize = 18
+TitleLabel.TextSize = 16
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 TitleLabel.Parent = Header
 
 local FPSLabel = Instance.new("TextLabel")
 FPSLabel.Text = "FPS: 60"
-FPSLabel.Size = UDim2.new(0.2, 0, 0.5, 0)
-FPSLabel.Position = UDim2.new(0.5, 0, 0.05, 0)
+FPSLabel.Size = UDim2.new(0.25, 0, 0.5, 0)
+FPSLabel.Position = UDim2.new(0.65, 0, 0.1, 0)
 FPSLabel.BackgroundTransparency = 1
 FPSLabel.TextColor3 = Colors.TextSecond
 FPSLabel.Font = Enum.Font.Gotham
-FPSLabel.TextSize = 12
+FPSLabel.TextSize = 11
 FPSLabel.Parent = Header
 
 local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0, 50, 0, 50)
-CloseBtn.Position = UDim2.new(1, -60, 0.05, 0)
+CloseBtn.Size = UDim2.new(0, 60, 0, 60)
+CloseBtn.Position = UDim2.new(1, -75, 0.05, 0)
 CloseBtn.BackgroundColor3 = Colors.DarkBg
 CloseBtn.Text = "✕"
 CloseBtn.TextColor3 = Colors.Danger
@@ -287,8 +319,9 @@ CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.TextSize = 24
 CloseBtn.Parent = Header
 CloseBtn.BorderSizePixel = 0
+CloseBtn.ZIndex = 60
 
-Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 10)
 
 CloseBtn.MouseButton1Click:Connect(function()
     AnimLib.FadeOut(MainFrame, 0.3, function()
@@ -314,21 +347,24 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- === SIDEBAR & TABS ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 📂 ระบบแท็บ
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local Sidebar = Instance.new("ScrollingFrame")
-Sidebar.Size = UDim2.new(0, 150, 1, -65)
-Sidebar.Position = UDim2.new(0, 10, 0, 65)
+Sidebar.Size = UDim2.new(0, 140, 1, -75)
+Sidebar.Position = UDim2.new(0, 8, 0, 72)
 Sidebar.BackgroundTransparency = 1
-Sidebar.ScrollBarThickness = 3
+Sidebar.ScrollBarThickness = 2
 Sidebar.Parent = MainFrame
 
 local SideList = Instance.new("UIListLayout")
 SideList.Parent = Sidebar
-SideList.Padding = UDim.new(0, 10)
+SideList.Padding = UDim.new(0, 8)
 
 local ContentArea = Instance.new("Frame")
-ContentArea.Size = UDim2.new(1, -175, 1, -75)
-ContentArea.Position = UDim2.new(0, 165, 0, 65)
+ContentArea.Size = UDim2.new(1, -165, 1, -80)
+ContentArea.Position = UDim2.new(0, 155, 0, 75)
 ContentArea.BackgroundTransparency = 1
 ContentArea.Parent = MainFrame
 
@@ -337,12 +373,12 @@ local currentPage = nil
 
 local function CreateTab(name, icon)
     local TabBtn = Instance.new("TextButton")
-    TabBtn.Size = UDim2.new(1, -10, 0, 45)
-    TabBtn.Text = icon .. " " .. name
+    TabBtn.Size = UDim2.new(1, -5, 0, 50)
+    TabBtn.Text = icon .. "\n" .. name
     TabBtn.BackgroundColor3 = Colors.ElementBg
     TabBtn.TextColor3 = Colors.TextSecond
     TabBtn.Font = Enum.Font.GothamSemibold
-    TabBtn.TextSize = 13
+    TabBtn.TextSize = 11
     TabBtn.Parent = Sidebar
     TabBtn.BorderSizePixel = 0
 
@@ -352,11 +388,11 @@ local function CreateTab(name, icon)
     Page.Size = UDim2.new(1, 0, 1, 0)
     Page.BackgroundTransparency = 1
     Page.Visible = false
-    Page.ScrollBarThickness = 4
+    Page.ScrollBarThickness = 3
     Page.Parent = ContentArea
 
     local PageList = Instance.new("UIListLayout")
-    PageList.Padding = UDim.new(0, 10)
+    PageList.Padding = UDim.new(0, 8)
     PageList.Parent = Page
 
     TabBtn.MouseButton1Click:Connect(function()
@@ -402,11 +438,11 @@ local function CreateTab(name, icon)
     return Page
 end
 
-local CombatTab = CreateTab("Combat", "⚔️")
-local VisualTab = CreateTab("Visuals", "👁️")
-local MoveTab = CreateTab("Movement", "🏃")
-local PlayerTab = CreateTab("Players", "👥")
-local SystemTab = CreateTab("System", "⚙️")
+local CombatTab = CreateTab("ต่อสู้", "⚔️")
+local VisualTab = CreateTab("สายตา", "👁️")
+local MoveTab = CreateTab("เคลื่อน", "🏃")
+local PlayerTab = CreateTab("ผู้เล่น", "👥")
+local SystemTab = CreateTab("ระบบ", "⚙️")
 
 CombatTab.Visible = true
 currentPage = CombatTab
@@ -417,29 +453,32 @@ if firstBtn and firstBtn:IsA("TextButton") then
     AnimLib.Glow(firstBtn, Colors.CyanAccent, 2)
 end
 
--- === UI BUILDERS ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 🔧 ตัวสร้าง UI
+-- ═══════════════════════════════════════════════════════════════════════════
+
 local function CreateSection(page, text)
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(1, 0, 0, 30)
+    Label.Size = UDim2.new(1, 0, 0, 35)
     Label.Text = "  " .. string.upper(text)
     Label.TextColor3 = Colors.TextDim
     Label.BackgroundTransparency = 1
     Label.Font = Enum.Font.GothamBold
-    Label.TextSize = 11
+    Label.TextSize = 12
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Parent = page
 end
 
 local function CreateToggle(page, text, configKey, callback)
     local Frame = Instance.new("Frame")
-    Frame.Size = UDim2.new(1, -5, 0, 45)
+    Frame.Size = UDim2.new(1, -5, 0, 50)
     Frame.BackgroundColor3 = Colors.ElementBg
     Frame.Parent = page
     
     Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 8)
 
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(0.65, 0, 1, 0)
+    Label.Size = UDim2.new(0.6, 0, 1, 0)
     Label.Position = UDim2.new(0, 15, 0, 0)
     Label.Text = text
     Label.TextColor3 = Colors.TextMain
@@ -449,8 +488,8 @@ local function CreateToggle(page, text, configKey, callback)
     Label.Parent = Frame
 
     local Status = Instance.new("TextButton")
-    Status.Size = UDim2.new(0, 50, 0, 28)
-    Status.Position = UDim2.new(1, -65, 0.5, -14)
+    Status.Size = UDim2.new(0, 55, 0, 32)
+    Status.Position = UDim2.new(1, -70, 0.5, -16)
     Status.BackgroundColor3 = Colors.HoverBg
     Status.Text = ""
     Status.Parent = Frame
@@ -484,7 +523,7 @@ end
 
 local function CreateSlider(page, text, min, max, configKey, callback)
     local Frame = Instance.new("Frame")
-    Frame.Size = UDim2.new(1, -5, 0, 60)
+    Frame.Size = UDim2.new(1, -5, 0, 70)
     Frame.BackgroundColor3 = Colors.ElementBg
     Frame.Parent = page
     
@@ -501,8 +540,8 @@ local function CreateSlider(page, text, min, max, configKey, callback)
     Label.Parent = Frame
 
     local Bar = Instance.new("Frame")
-    Bar.Size = UDim2.new(1, -30, 0, 8)
-    Bar.Position = UDim2.new(0, 15, 0, 35)
+    Bar.Size = UDim2.new(1, -30, 0, 10)
+    Bar.Position = UDim2.new(0, 15, 0, 38)
     Bar.BackgroundColor3 = Colors.HoverBg
     Bar.Parent = Frame
     
@@ -545,7 +584,7 @@ end
 
 local function CreateDropdown(page, text, options, callback)
     local Frame = Instance.new("Frame")
-    Frame.Size = UDim2.new(1, -5, 0, 45)
+    Frame.Size = UDim2.new(1, -5, 0, 50)
     Frame.BackgroundColor3 = Colors.ElementBg
     Frame.Parent = page
     
@@ -554,7 +593,7 @@ local function CreateDropdown(page, text, options, callback)
 
     local Label = Instance.new("TextLabel")
     Label.Text = text .. " ▼"
-    Label.Size = UDim2.new(1, -40, 0, 45)
+    Label.Size = UDim2.new(1, -40, 0, 50)
     Label.Position = UDim2.new(0, 15, 0, 0)
     Label.TextColor3 = Colors.TextMain
     Label.Font = Enum.Font.Gotham
@@ -567,16 +606,16 @@ local function CreateDropdown(page, text, options, callback)
     Label.MouseButton1Click:Connect(function()
         IsOpen = not IsOpen
         if IsOpen then
-            AnimLib.Tween(Frame, {Size = UDim2.new(1, -5, 0, 45 + (#options * 35))}, 0.3)
+            AnimLib.Tween(Frame, {Size = UDim2.new(1, -5, 0, 50 + (#options * 40))}, 0.3)
         else
-            AnimLib.Tween(Frame, {Size = UDim2.new(1, -5, 0, 45)}, 0.3)
+            AnimLib.Tween(Frame, {Size = UDim2.new(1, -5, 0, 50)}, 0.3)
         end
     end)
 
     for i, opt in ipairs(options) do
         local OptBtn = Instance.new("TextButton")
-        OptBtn.Size = UDim2.new(1, 0, 0, 35)
-        OptBtn.Position = UDim2.new(0, 0, 0, 45 + ((i-1)*35))
+        OptBtn.Size = UDim2.new(1, 0, 0, 40)
+        OptBtn.Position = UDim2.new(0, 0, 0, 50 + ((i-1)*40))
         OptBtn.Text = "  " .. opt
         OptBtn.TextColor3 = Colors.TextSecond
         OptBtn.BackgroundColor3 = Colors.HoverBg
@@ -599,19 +638,19 @@ local function CreateDropdown(page, text, options, callback)
             Label.Text = text .. " [" .. opt .. "] ▼"
             callback(opt)
             IsOpen = false
-            AnimLib.Tween(Frame, {Size = UDim2.new(1, -5, 0, 45)}, 0.3)
+            AnimLib.Tween(Frame, {Size = UDim2.new(1, -5, 0, 50)}, 0.3)
         end)
     end
 end
 
 local function CreateButton(page, text, callback)
     local Btn = Instance.new("TextButton")
-    Btn.Size = UDim2.new(1, -5, 0, 45)
+    Btn.Size = UDim2.new(1, -5, 0, 50)
     Btn.Text = text
     Btn.BackgroundColor3 = Colors.ActiveBg
     Btn.TextColor3 = Colors.CyanAccent
     Btn.Font = Enum.Font.GothamSemibold
-    Btn.TextSize = 14
+    Btn.TextSize = 13
     Btn.Parent = page
     Btn.BorderSizePixel = 0
 
@@ -633,27 +672,30 @@ local function CreateButton(page, text, callback)
     end)
 end
 
--- === POPULATE TABS ===
-CreateSection(CombatTab, "AIMBOT SETTINGS")
-CreateToggle(CombatTab, "Enable Aimbot", "Aimbot")
-CreateDropdown(CombatTab, "Target Part", {"Head", "HumanoidRootPart", "Torso"}, function(val) RuJ_Config.AimPart = val end)
-CreateSlider(CombatTab, "Smoothness", 1, 20, "AimSmooth")
-CreateSlider(CombatTab, "Hit Chance", 0, 100, "HitChance")
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 📋 ปล่อยอุปกรณ์
+-- ═══════════════════════════════════════════════════════════════════════════
 
-CreateSection(CombatTab, "HITBOX")
-CreateToggle(CombatTab, "Hitbox Expander", "HitboxExpander")
-CreateSlider(CombatTab, "Hitbox Size", 2, 30, "HitboxSize")
+CreateSection(CombatTab, "ตั้งค่า Aimbot")
+CreateToggle(CombatTab, "เปิด Aimbot", "Aimbot")
+CreateDropdown(CombatTab, "ส่วนเป้าหมาย", {"หัว", "ตัว", "ลำตัว"}, function(val) RuJ_Config.AimPart = val end)
+CreateSlider(CombatTab, "ความเรียบ", 1, 20, "AimSmooth")
+CreateSlider(CombatTab, "โอกาสโจมตี %", 0, 100, "HitChance")
+
+CreateSection(CombatTab, "Hitbox")
+CreateToggle(CombatTab, "ขยาย Hitbox", "HitboxExpander")
+CreateSlider(CombatTab, "ขนาด Hitbox", 2, 30, "HitboxSize")
 
 CreateSection(VisualTab, "ESP")
-CreateToggle(VisualTab, "ESP Boxes", "ESP_Box")
-CreateToggle(VisualTab, "ESP Names", "ESP_Name")
+CreateToggle(VisualTab, "กล่อง ESP", "ESP_Box")
+CreateToggle(VisualTab, "ชื่อ ESP", "ESP_Name")
 
-CreateSection(VisualTab, "TRACERS")
-CreateToggle(VisualTab, "Line Tracers", "Tracers")
-CreateDropdown(VisualTab, "Origin Position", {"Top", "Center", "Bottom"}, function(val) RuJ_Config.TracerOrigin = val end)
+CreateSection(VisualTab, "เส้นติดตาม")
+CreateToggle(VisualTab, "เส้นติดตาม", "Tracers")
+CreateDropdown(VisualTab, "ตำแหน่งเริ่มต้น", {"บน", "กลาง", "ล่าง"}, function(val) RuJ_Config.TracerOrigin = val end)
 
-CreateSection(VisualTab, "WORLD")
-CreateToggle(VisualTab, "Full Bright", "FullBright", function(s)
+CreateSection(VisualTab, "โลก")
+CreateToggle(VisualTab, "เต็มความสว่าง", "FullBright", function(s)
     if s then
         Lighting.Brightness = 2
         Lighting.ClockTime = 14
@@ -664,22 +706,22 @@ CreateToggle(VisualTab, "Full Bright", "FullBright", function(s)
     end
 end)
 
-CreateSection(MoveTab, "CHARACTER")
-CreateSlider(MoveTab, "Walk Speed", 16, 300, "Speed", function(v) 
+CreateSection(MoveTab, "ตัวละคร")
+CreateSlider(MoveTab, "ความเร็ว", 16, 300, "Speed", function(v) 
     if LocalPlayer.Character then LocalPlayer.Character.Humanoid.WalkSpeed = v end
 end)
-CreateSlider(MoveTab, "Jump Power", 50, 500, "Jump", function(v) 
+CreateSlider(MoveTab, "พลังกระโดด", 50, 500, "Jump", function(v) 
     if LocalPlayer.Character then 
         LocalPlayer.Character.Humanoid.UseJumpPower = true
         LocalPlayer.Character.Humanoid.JumpPower = v 
     end
 end)
-CreateToggle(MoveTab, "Infinite Jump", "InfiniteJump")
-CreateToggle(MoveTab, "NoClip", "NoClip")
+CreateToggle(MoveTab, "กระโดดไม่จำกัด", "InfiniteJump")
+CreateToggle(MoveTab, "ผ่านผนัง", "NoClip")
 
-CreateSection(MoveTab, "UTILITY")
-CreateToggle(MoveTab, "Fly Mode", "Fly")
-CreateButton(MoveTab, "Click TP Tool", function()
+CreateSection(MoveTab, "เครื่องมือ")
+CreateToggle(MoveTab, "โหมดบิน", "Fly")
+CreateButton(MoveTab, "โทรทำลาย", function()
     local t = Instance.new("Tool")
     t.Name = "Teleport Tool"
     t.RequiresHandle = false
@@ -689,21 +731,21 @@ CreateButton(MoveTab, "Click TP Tool", function()
     end)
 end)
 
-CreateSection(PlayerTab, "TARGET")
+CreateSection(PlayerTab, "เป้าหมาย")
 local PlayerList = {}
 for _, p in pairs(Players:GetPlayers()) do table.insert(PlayerList, p.Name) end
-CreateDropdown(PlayerTab, "Select Player", PlayerList, function(name)
+CreateDropdown(PlayerTab, "เลือกผู้เล่น", PlayerList, function(name)
     local target = Players:FindFirstChild(name)
     if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
         LocalPlayer.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
     end
 end)
-CreateButton(PlayerTab, "Refresh List", function()
-    print("Please reopen to refresh")
+CreateButton(PlayerTab, "รีเซตรายชื่อ", function()
+    print("เปิดใหม่อีกครั้งเพื่อรีเซต")
 end)
 
-CreateSection(SystemTab, "OPTIMIZATION")
-CreateButton(SystemTab, "FPS Boost", function()
+CreateSection(SystemTab, "ปรับปรุง")
+CreateButton(SystemTab, "เพิ่ม FPS", function()
     for _, v in pairs(Workspace:GetDescendants()) do
         if v:IsA("BasePart") then 
             v.Material = Enum.Material.SmoothPlastic
@@ -714,12 +756,12 @@ CreateButton(SystemTab, "FPS Boost", function()
     end
 end)
 
-CreateSection(SystemTab, "MISC")
-CreateToggle(SystemTab, "Anti-AFK", "AntiAFK")
-CreateButton(SystemTab, "Rejoin Server", function()
+CreateSection(SystemTab, "อื่นๆ")
+CreateToggle(SystemTab, "ต้านการ AFK", "AntiAFK")
+CreateButton(SystemTab, "เข้าสู่เซิร์ฟเวอร์ใหม่", function()
     game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
 end)
-CreateButton(SystemTab, "Server Hop", function()
+CreateButton(SystemTab, "กระโดดเซิร์ฟเวอร์", function()
     local Http = game:GetService("HttpService")
     pcall(function()
         local Servers = Http:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
@@ -732,7 +774,10 @@ CreateButton(SystemTab, "Server Hop", function()
     end)
 end)
 
--- === RUNTIME LOGIC ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- ⚙️ ลอจิกรันไทม์
+-- ═══════════════════════════════════════════════════════════════════════════
+
 RunService.RenderStepped:Connect(function()
     if RuJ_Config.Aimbot then
         local target = nil
@@ -820,8 +865,8 @@ RunService.Heartbeat:Connect(function()
                 if onScreen then
                     if RuJ_Config.Tracers then
                         local origin = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
-                        if RuJ_Config.TracerOrigin == "Top" then origin = Vector2.new(Camera.ViewportSize.X/2, 0)
-                        elseif RuJ_Config.TracerOrigin == "Center" then origin = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2) end
+                        if RuJ_Config.TracerOrigin == "บน" then origin = Vector2.new(Camera.ViewportSize.X/2, 0)
+                        elseif RuJ_Config.TracerOrigin == "กลาง" then origin = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2) end
                         DrawLine(origin, Vector2.new(hrpPos.X, hrpPos.Y), Colors.CyanAccent)
                     end
                     
@@ -862,7 +907,10 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
--- === OPEN/CLOSE ===
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 🔌 เปิด/ปิด
+-- ═══════════════════════════════════════════════════════════════════════════
+
 Icon.MouseButton1Click:Connect(function()
     if MainFrame.Visible then
         AnimLib.FadeOut(MainFrame, 0.3, function()
@@ -874,4 +922,4 @@ Icon.MouseButton1Click:Connect(function()
     end
 end)
 
-print("✅ RUJXMOD ULTIMATE V5.0 LOADED - Press RX icon to open!")
+print("✅ RUJXMOD ULTIMATE V5 LOADED - กดปุ่ม RX เพื่อเปิดเมนู!")end
