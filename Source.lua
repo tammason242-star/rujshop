@@ -1,103 +1,114 @@
--- สร้าง ScreenGui
-local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local Header = Instance.new("Frame")
-local Title = Instance.new("TextLabel")
-local Content = Instance.new("ScrollingFrame")
-local IconBtn = Instance.new("ImageButton")
-local UICorner_Icon = Instance.new("UICorner")
-local UIGridLayout = Instance.new("UIGridLayout")
+-- [[ RUJSHOP SOURCE - FINAL VERSION ]] --
+local player = game:GetService("Players").LocalPlayer
+local pgui = player:WaitForChild("PlayerGui")
 
--- ตั้งค่า ScreenGui
-ScreenGui.Name = "TestScriptUI"
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+-- ลบ UI เก่าออกก่อนรันใหม่
+if pgui:FindFirstChild("RUJSHOP_UI") then
+    pgui.RUJSHOP_UI:Destroy()
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "RUJSHOP_UI"
+ScreenGui.Parent = pgui
 ScreenGui.ResetOnSpawn = false
 
--- 1. สร้างปุ่มไอคอน (วงกลมแดงทางซ้าย)
-IconBtn.Name = "ScriptIcon"
+-- 1. ปุ่มไอคอนวงกลม (แดง-ดำ)
+local IconBtn = Instance.new("TextButton")
+IconBtn.Name = "MainIcon"
 IconBtn.Parent = ScreenGui
-IconBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+IconBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 15) -- สีดำ
 IconBtn.Position = UDim2.new(0, 20, 0.5, -30)
 IconBtn.Size = UDim2.new(0, 60, 0, 60)
-IconBtn.Image = "rbxassetid://123456789" -- ใส่ ID รูปภาพของคุณตรงนี้
-IconBtn.BorderSizePixel = 2
-IconBtn.BorderColor3 = Color3.fromRGB(255, 75, 75)
+IconBtn.Text = "RUJ" -- ชื่อร้านคุณ
+IconBtn.TextColor3 = Color3.fromRGB(255, 75, 75) -- สีแดง
+IconBtn.Font = Enum.Font.GothamBold
+IconBtn.TextSize = 14
+IconBtn.BorderSizePixel = 0
 
-UICorner_Icon.CornerRadius = UDim.new(1, 0)
-UICorner_Icon.Parent = IconBtn
+local IconCorner = Instance.new("UICorner")
+IconCorner.CornerRadius = UDim.new(1, 0) -- ทำให้กลม
+IconCorner.Parent = IconBtn
 
--- 2. สร้างเมนูหลัก (Main Window)
+local IconStroke = Instance.new("UIStroke") -- เพิ่มขอบเรืองแสง
+IconStroke.Color = Color3.fromRGB(255, 75, 75)
+IconStroke.Thickness = 2
+IconStroke.Parent = IconBtn
+
+-- 2. หน้าต่างเมนูหลัก
+local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainWindow"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
 MainFrame.Position = UDim2.new(0, 100, 0.5, -160)
 MainFrame.Size = UDim2.new(0, 450, 0, 320)
 MainFrame.BorderSizePixel = 0
-MainFrame.Visible = false -- ปิดไว้ก่อน
+MainFrame.Visible = false -- ปิดไว้รอเปิด
 
--- แถบสีแดงด้านข้าง
 local SideBar = Instance.new("Frame")
 SideBar.Size = UDim2.new(0, 5, 1, 0)
 SideBar.BackgroundColor3 = Color3.fromRGB(255, 75, 75)
-SideBar.BorderSizePixel = 0
 SideBar.Parent = MainFrame
 
 -- ส่วนหัว (Header)
-Header.Name = "Header"
-Header.Parent = MainFrame
-Header.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+local Header = Instance.new("Frame")
 Header.Size = UDim2.new(1, 0, 0, 50)
+Header.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+Header.Parent = MainFrame
 
-Title.Parent = Header
-Title.BackgroundTransparency = 1
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -20, 1, 0)
 Title.Position = UDim2.new(0, 15, 0, 0)
-Title.Size = UDim2.new(1, -15, 1, 0)
-Title.Font = Enum.Font.Kanit
-Title.Text = "🔴 ระบบสคริปทดลอง 0.0"
+Title.Text = "🔴 RUJSHOP - VERSION 0.0"
 Title.TextColor3 = Color3.fromRGB(255, 75, 75)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.GothamBold
 Title.TextSize = 18
 Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = Header
 
--- ส่วนเนื้อหา (Content) พร้อมปุ่ม
-Content.Parent = MainFrame
+-- ส่วนเนื้อหาสำหรับใส่ปุ่ม
+local Content = Instance.new("ScrollingFrame")
+Content.Size = UDim2.new(1, -30, 1, -80)
+Content.Position = UDim2.new(0, 15, 0, 65)
 Content.BackgroundTransparency = 1
-Content.Position = UDim2.new(0, 20, 0, 70)
-Content.Size = UDim2.new(1, -40, 1, -90)
 Content.ScrollBarThickness = 2
+Content.Parent = MainFrame
 
-UIGridLayout.Parent = Content
-UIGridLayout.CellPadding = UDim2.new(0, 12, 0, 12)
-UIGridLayout.CellSize = UDim2.new(0, 190, 0, 50)
+local Layout = Instance.new("UIGridLayout")
+Layout.CellSize = UDim2.new(0, 195, 0, 45)
+Layout.CellPadding = UDim2.new(0, 10, 0, 10)
+Layout.Parent = Content
 
--- ฟังก์ชันสร้างปุ่ม "ทดลอง"
-local function createButton(name)
+-- ฟังก์ชันสร้างปุ่มทดลอง
+local function AddButton(txt, callback)
     local btn = Instance.new("TextButton")
-    btn.Text = name
-    btn.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
-    btn.TextColor3 = Color3.fromRGB(239, 239, 239)
-    btn.Font = Enum.Font.Kanit
+    btn.Text = txt
+    btn.BackgroundColor3 = Color3.fromRGB(33, 33, 33)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.Gotham
     btn.TextSize = 14
     btn.Parent = Content
     
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 6)
     corner.Parent = btn
-    
-    btn.MouseButton1Click:Connect(function()
-        print("เปิดใช้งาน: " .. name)
-        btn.BackgroundColor3 = Color3.fromRGB(255, 75, 75)
-        wait(0.2)
-        btn.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
-    end)
+
+    btn.MouseButton1Click:Connect(callback)
 end
 
--- สร้างปุ่ม 6 ปุ่มตาม HTML
-for i = 1, 6 do
-    createButton("ทดลอง " .. i)
-end
+-- เพิ่มปุ่มทดลอง
+AddButton("Speed (วิ่งเร็ว)", function()
+    player.Character.Humanoid.WalkSpeed = 100
+end)
 
--- 3. ระบบเปิด/ปิดเมนู
+AddButton("Infinite Jump", function()
+    -- ใส่โค้ดกระโดดไม่จำกัดตรงนี้
+    print("Enabled Infinite Jump")
+end)
+
+-- ระบบเปิด/ปิด
 IconBtn.MouseButton1Click:Connect(function()
     MainFrame.Visible = not MainFrame.Visible
 end)
 
+print("RUJSHOP UI Loaded!")
