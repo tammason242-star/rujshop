@@ -1,10 +1,8 @@
 -- [[ RUJXMOD - PROFESSIONAL VERSION ]] --
 local player = game:GetService("Players").LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
-local hum = char:WaitForChild("Humanoid")
 local pgui = player:WaitForChild("PlayerGui")
 
--- ลบ UI เก่าออกก่อน
+-- ลบ UI เก่าออกก่อนเพื่อป้องกันการรันซ้ำ
 if pgui:FindFirstChild("RUJXMOD_UI") then pgui.RUJXMOD_UI:Destroy() end
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -12,7 +10,7 @@ ScreenGui.Name = "RUJXMOD_UI"
 ScreenGui.Parent = pgui
 ScreenGui.ResetOnSpawn = false
 
--- === 1. ระบบไอคอนลอย (Floating Icon) ===
+-- === 1. ระบบไอคอน RUJXMOD (ลากได้อิสระ) ===
 local Icon = Instance.new("TextButton")
 Icon.Name = "RUJXMOD_Icon"
 Icon.Parent = ScreenGui
@@ -34,33 +32,33 @@ IconStroke.Color = Color3.fromRGB(255, 0, 0)
 IconStroke.Thickness = 3
 IconStroke.Parent = Icon
 
--- ระบบลากไอคอน (Drag Icon)
-local draggingIcon, dragInputIcon, dragStartIcon, startPosIcon
+-- ระบบลากไอคอน (Drag System)
+local UIS = game:GetService("UserInputService")
+local dragIcon, dragStart, startPos
 Icon.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        draggingIcon = true
-        dragStartIcon = input.Position
-        startPosIcon = Icon.Position
+        dragIcon = true
+        dragStart = input.Position
+        startPos = Icon.Position
         input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then draggingIcon = false end
+            if input.UserInputState == Enum.UserInputState.End then dragIcon = false end
         end)
     end
 end)
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if draggingIcon and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStartIcon
-        Icon.Position = UDim2.new(startPosIcon.X.Scale, startPosIcon.X.Offset + delta.X, startPosIcon.Y.Scale, startPosIcon.Y.Offset + delta.Y)
+UIS.InputChanged:Connect(function(input)
+    if dragIcon and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        Icon.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
 
--- === 2. หน้าต่างเมนูหลัก (Main Menu) ===
+-- === 2. หน้าต่างเมนูหลัก (Professional Layout) ===
 local Main = Instance.new("Frame")
 Main.Name = "MainFrame"
 Main.Parent = ScreenGui
-Main.Size = UDim2.new(0, 400, 0, 350)
-Main.Position = UDim2.new(0.5, -200, 0.5, -175)
+Main.Size = UDim2.new(0, 350, 0, 380)
+Main.Position = UDim2.new(0.5, -175, 0.5, -190)
 Main.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-Main.BorderSizePixel = 0
 Main.Visible = false
 
 local MainCorner = Instance.new("UICorner")
@@ -68,106 +66,106 @@ MainCorner.CornerRadius = UDim.new(0, 10)
 MainCorner.Parent = Main
 
 local Header = Instance.new("Frame")
-Header.Size = UDim2.new(1, 0, 0, 40)
-Header.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Header.Size = UDim2.new(1, 0, 0, 45)
+Header.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Header.Parent = Main
 local Title = Instance.new("TextLabel")
 Title.Parent = Header
 Title.Size = UDim2.new(1, 0, 1, 0)
-Title.Text = "  RUJXMOD PREMIUM"
+Title.Text = "  RUJXMOD - PREMIUM HUB"
 Title.TextColor3 = Color3.fromRGB(255, 0, 0)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 16
 Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.BackgroundTransparency = 1
 
--- === 3. ฟังก์ชัน Slider (แถบเลื่อนปรับค่า) ===
-local function CreateSlider(name, min, max, default, callback)
-    local SliderFrame = Instance.new("Frame")
-    SliderFrame.Size = UDim2.new(1, -20, 0, 50)
-    SliderFrame.BackgroundTransparency = 1
-    SliderFrame.Parent = Main
+local Container = Instance.new("ScrollingFrame")
+Container.Size = UDim2.new(1, -20, 1, -60)
+Container.Position = UDim2.new(0, 10, 0, 55)
+Container.BackgroundTransparency = 1
+Container.ScrollBarThickness = 2
+Container.Parent = Main
+local UIList = Instance.new("UIListLayout")
+UIList.Parent = Container
+UIList.Padding = UDim.new(0, 12)
+
+-- === 3. ฟังก์ชันสร้าง Slider ปรับค่า ===
+local function AddSlider(name, min, max, default, callback)
+    local SFrame = Instance.new("Frame")
+    SFrame.Size = UDim2.new(1, 0, 0, 50)
+    SFrame.BackgroundTransparency = 1
+    SFrame.Parent = Container
     
     local Label = Instance.new("TextLabel")
     Label.Text = name .. ": " .. default
     Label.Size = UDim2.new(1, 0, 0, 20)
-    Label.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Label.BackgroundTransparency = 1
+    Label.TextColor3 = Color3.fromRGB(220, 220, 220)
     Label.Font = Enum.Font.Gotham
-    Label.Parent = SliderFrame
+    Label.BackgroundTransparency = 1
+    Label.Parent = SFrame
 
     local Bar = Instance.new("Frame")
-    Bar.Size = UDim2.new(1, 0, 0, 5)
-    Bar.Position = UDim2.new(0, 0, 0, 30)
-    Bar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Bar.Parent = SliderFrame
-    
+    Bar.Size = UDim2.new(1, -10, 0, 6)
+    Bar.Position = UDim2.new(0, 5, 0, 30)
+    Bar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    Bar.Parent = SFrame
     local Fill = Instance.new("Frame")
     Fill.Size = UDim2.new((default-min)/(max-min), 0, 1, 0)
     Fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
     Fill.Parent = Bar
 
-    -- ระบบเลื่อน Slider
-    SliderFrame.InputBegan:Connect(function(input)
+    SFrame.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            local function Update()
-                local percent = math.clamp((game:GetService("UserInputService"):GetMouseLocation().X - Bar.AbsolutePosition.X) / Bar.AbsoluteSize.X, 0, 1)
-                local value = math.floor(min + (max - min) * percent)
-                Fill.Size = UDim2.new(percent, 0, 1, 0)
-                Label.Text = name .. ": " .. value
-                callback(value)
+            local function Upd()
+                local per = math.clamp((UIS:GetMouseLocation().X - Bar.AbsolutePosition.X) / Bar.AbsoluteSize.X, 0, 1)
+                local val = math.floor(min + (max - min) * per)
+                Fill.Size = UDim2.new(per, 0, 1, 0)
+                Label.Text = name .. ": " .. val
+                callback(val)
             end
-            Update()
-            local move = game:GetService("UserInputService").InputChanged:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then Update() end
+            Upd()
+            local conn = UIS.InputChanged:Connect(function(i)
+                if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then Upd() end
             end)
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then move:Disconnect() end
-            end)
+            input.Changed:Connect(function() if input.UserInputState == Enum.UserInputState.End then conn:Disconnect() end end)
         end
     end)
 end
 
--- จัดเลย์เอาต์เมนู
-local UIList = Instance.new("UIListLayout")
-UIList.Parent = Main
-UIList.Padding = UDim.new(0, 10)
-UIList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+-- === 4. ใส่ฟังก์ชันการโกง ===
 
--- === 4. เพิ่มฟังก์ชันต่างๆ ===
-
--- 1. วิ่งเร็ว (Speed)
-CreateSlider("WalkSpeed", 16, 500, 16, function(v)
+-- ปรับวิ่งเร็ว
+AddSlider("Walk Speed", 16, 300, 16, function(v)
     player.Character.Humanoid.WalkSpeed = v
 end)
 
--- 2. กระโดดสูง (Jump)
-CreateSlider("JumpPower", 50, 500, 50, function(v)
+-- ปรับกระโดดสูง
+AddSlider("Jump Power", 50, 500, 50, function(v)
     player.Character.Humanoid.UseJumpPower = true
     player.Character.Humanoid.JumpPower = v
 end)
 
--- 3. ปุ่มบิน (Fly)
+-- ระบบบิน (Fly)
 local Flying = false
 local FlyBtn = Instance.new("TextButton")
-FlyBtn.Size = UDim2.new(0.9, 0, 0, 40)
+FlyBtn.Size = UDim2.new(1, 0, 0, 40)
 FlyBtn.Text = "FLY: OFF"
 FlyBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 FlyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-FlyBtn.Parent = Main
+FlyBtn.Font = Enum.Font.GothamBold
+FlyBtn.Parent = Container
 FlyBtn.MouseButton1Click:Connect(function()
     Flying = not Flying
     FlyBtn.Text = "FLY: " .. (Flying and "ON" or "OFF")
     FlyBtn.BackgroundColor3 = Flying and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(40, 40, 40)
     
-    -- โค้ดบินอย่างง่าย
     if Flying then
         local bv = Instance.new("BodyVelocity", player.Character.HumanoidRootPart)
-        bv.Name = "FlyBV"
         bv.MaxForce = Vector3.new(1e6, 1e6, 1e6)
-        spawn(function()
+        task.spawn(function()
             while Flying do
                 bv.Velocity = workspace.CurrentCamera.CFrame.LookVector * 100
-                wait()
+                task.wait()
             end
             bv:Destroy()
         end)
@@ -179,4 +177,4 @@ Icon.MouseButton1Click:Connect(function()
     Main.Visible = not Main.Visible
 end)
 
-print("RUJXMOD Loaded!")
+print("RUJXMOD Premium Loaded!")
